@@ -14,11 +14,13 @@ class Piece():
         self.image = pygame.transform.scale_by(self.image, factor)
         self.rect.size = self.image.get_size()
 
-    def move(self, x, y) -> None:
-        self.pos = x, y
+    def move(self, pos) -> None:
+        self.pos = pos
 
 
 class Pawn(Piece):
-    def __init__(self) -> None:
-        super.__init__("../Assets/pawn.png")
+    def __init__(self, pos: tuple) -> None:
+        super().__init__("./Assets/pawn.png")
+        self.move(pos)
+
 

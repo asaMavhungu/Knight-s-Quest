@@ -1,55 +1,45 @@
 import sys, pygame
-pygame.init()
+from Scripts.board import Board
 
-size = width, height = 640, 480
-speed = [2, 2]
-black = 0, 0, 0
-FPS = 60
+black = (0, 0, 0)
 
-screen = pygame.display.set_mode(size)
+class Game:
+    def __init__(self) -> None:
+        pygame.init()
 
-clock = pygame.time.Clock()
+        size = width, height = 640, 480
+        
+        self.FPS = 60
+        self.screen = pygame.display.set_mode(size)
+        self.clock = pygame.time.Clock()
 
-board = pygame.image.load("./Assets/board.png")
-board = pygame.transform.scale_by(board, 3)
+        self.board = Board("./Assets/board.png")
+        self.board.scale_by(3)
 
-pawn = pygame.image.load("./Assets/pawn.png")
-pawn = pygame.transform.scale_by(pawn, 3)
+        
+    def run(self):
+                
 
-board_rect = board.get_rect()
-pawn_rect = pawn.get_rect()
+        #ball = pygame.image.load("intro_ball.gif")
+        #ballrect = ball.get_rect()
 
-#ball = pygame.image.load("intro_ball.gif")
-#ballrect = ball.get_rect()
+        dragging = False
 
-dragging = False
+        while True:
 
-while True:
+            pygame.display.update()
 
-    pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: sys.exit()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and pawn_rect.collidepoint(event.pos):
-                dragging = True
-                offset_x = event.pos[0] - pawn_rect.x
-                offset_y = event.pos[1] - pawn_rect.y
+            self.clock.tick(self.FPS)
 
-        elif event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:
-                dragging = False
-                pawn_rect.x, pawn_rect.y = ((pawn_rect.x+offset_x)//48)*48, ((pawn_rect.y+offset_y)//48)*48
+            self.screen.fill(black)
 
-        if dragging:
-            mouse_x , mouse_y = pygame.mouse.get_pos()
-            pawn_rect.x = mouse_x - offset_x
-            pawn_rect.y = mouse_y - offset_y
+            self.screen.blit(self.board.image, (0, 0))  # Blit the board image onto the screen
+            pygame.display.flip()
 
-    clock.tick(FPS)
-
-    screen.fill(black)
-    screen.blit(board, board_rect)
-    screen.blit(pawn, pawn_rect)
-    pygame.display.flip()
+if __name__ == "__main__":
+    game = Game()
+    game.run()

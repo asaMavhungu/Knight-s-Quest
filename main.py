@@ -40,6 +40,7 @@ while True:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 dragging = False
+                pawn_rect.x, pawn_rect.y = ((pawn_rect.x+offset_x)//48)*48, ((pawn_rect.y+offset_y)//48)*48
 
         if dragging:
             mouse_x , mouse_y = pygame.mouse.get_pos()

@@ -14,10 +14,11 @@ class Game:
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
 
-        self.board = Board("./Assets/board.png")
+        self.board : Board = Board("./Assets/board.png")
         self.board.scale_by(3)
 
-        self.pieces = []
+        self.pieces : list[Piece] = []
+
         for i in range(8):
             for j in range(8):
                 piece_symbol = self.board.chessboard[i, j]
@@ -31,10 +32,9 @@ class Game:
     def run(self):
                 
 
-        #ball = pygame.image.load("intro_ball.gif")
-        #ballrect = ball.get_rect()
+        dragging : bool = False
 
-        dragging = False
+        current_piece : Piece | None = None
 
         while True:
 
@@ -45,6 +45,27 @@ class Game:
 
 
 
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    for piece in self.pieces:
+                        if event.button == 1 and piece.rect.collidepoint(event.pos):
+                            dragging = True
+                            current_piece = piece
+                            offset_x = event.pos[0] - piece.rect.x
+                            offset_y = event.pos[1] - piece.rect.y
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1 and dragging:
+                        dragging = False
+                        x, y = ((current_piece.rect.x+offset_x)//48)*48, ((current_piece.rect.y+offset_y)//48)*48
+                        current_piece.move(x, y)
+                        current_piece = None
+
+
+                if dragging:
+                    mouse_x , mouse_y = pygame.mouse.get_pos()
+                    x = mouse_x - offset_x
+                    y = mouse_y - offset_y
+                    current_piece.move(x , y)
 
 
             self.clock.tick(self.FPS)

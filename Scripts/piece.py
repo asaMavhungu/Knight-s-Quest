@@ -16,7 +16,7 @@ class Piece():
         #self.rect.size = self.image.get_size()
         self.rect = self.image.get_rect()
         self.rect.topleft = old_rect.topleft
-        print(self.rect.x)
+        #print(self.rect.x)
 
     def move(self, x, y) -> None:
         self.pos = (x, y)
@@ -27,6 +27,6 @@ class Pawn(Piece):
     def __init__(self, pos: tuple) -> None:
         super().__init__("./Assets/pawn.png")
         self.move(pos[0], pos[1])
-        print(pos)
+        #print(pos)
 
 

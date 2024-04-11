@@ -26,6 +26,7 @@ class Game:
                     x, y = (j+1)*48, (i+1)*48
                     piece = Pawn((x,y))
                     piece.scale_by(3)
+                    piece.last_valid_pos = (x, y)
                     self.pieces.append(piece)
 
         
@@ -57,8 +58,17 @@ class Game:
                     if event.button == 1 and dragging:
                         dragging = False
                         x, y = ((current_piece.rect.x+offset_x)//48)*48, ((current_piece.rect.y+offset_y)//48)*48
-                        current_piece.move(x, y)
+                        if current_piece.is_valid_move(x, y, 48):
+                            print("valid")
+                            current_piece.move(x, y)
+                            current_piece.last_valid_pos = x, y
+                        else:
+                            print("invalid")
+                            prev_x, prev_y = current_piece.last_valid_pos
+                            current_piece.move(prev_x, prev_y)
+                        #print(current_piece.is_valid_move(x, y, 48))
                         current_piece = None
+                            
 
 
                 if dragging:
